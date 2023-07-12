@@ -25,7 +25,6 @@ auth.onAuthStateChanged((user) => {
         <p>user id ${user.uid}</p> 
         <h2>${user.email}</h2>
         <img src = "${user.photoURL}">`;
-
   } else {
     // if user is signed out enable the sign in section
     whenSignedIn.hidden = true;
