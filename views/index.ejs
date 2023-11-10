@@ -35,7 +35,7 @@
       integrity="sha512-/seDHxVfh1NvFUscAj8GsHQVZJvr2jjAoYsNL7As2FCaFHUHYIarl3sRCvVlFgyouVNiRgHIebyLKjpgd1SLDw=="
       crossorigin="anonymous"
     ></script>
-    <script src="app.js" defer type="module"></script>
+    <!-- <script src="app.js" defer type="module"></script> -->
     <style>
       body {
         margin: 0;
@@ -61,7 +61,7 @@
       <div id="userDetails"></div>
       <button id="signOutBtn">Sign out</button>
     </section>
-
+    <!-- 
     <hr />
 
     <section>
@@ -69,6 +69,48 @@
       <ul id="thingsList"></ul>
 
       <button id="createThing">Create</button>
-    </section>
+    </section> -->
   </body>
+  <script>
+    const auth = firebase.auth();
+
+    const whenSignedIn = document.getElementById("whenSignedIn");
+    const whenSignedOut = document.getElementById("whenSignedOut");
+
+    const signInBtn = document.getElementById("signInBtn");
+    const signOutBtn = document.getElementById("signOutBtn");
+
+    const userDetails = document.getElementById("userDetails");
+
+    const userDetail = document.getElementById("userDetail");
+
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    signInBtn.onclick = () => {
+      auth.signInWithPopup(provider).catch((err) => {
+        console.log(err.code);
+        console.log(err.message);
+        alert(`${err.message}` + " Please contact Administrator ");
+      });
+    };
+
+    signOutBtn.onclick = () => auth.signOut();
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // if user signed in disable the sign in section
+        whenSignedIn.hidden = false;
+        whenSignedOut.hidden = true;
+        userDetails.innerHTML = `<h3> hello ${user.displayName}!</h3>
+    <p>user id ${user.uid}</p> 
+    <h2>${user.email}</h2>
+    <img src = "${user.photoURL}">`;
+      } else {
+        // if user is signed out enable the sign in section
+        whenSignedIn.hidden = true;
+        whenSignedOut.hidden = false;
+        userDetail.innerHTML = "Please Login";
+      }
+    });
+  </script>
 </html>
